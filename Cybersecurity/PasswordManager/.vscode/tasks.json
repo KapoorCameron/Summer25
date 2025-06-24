@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label"  : "Build Password Manager",
+            "type"   : "shell",
+            "command": "cl",
+            "args"   : [
+                "/EHsc",
+                "/I", "src",
+                "/Fo:build\\",
+                "main.cpp",
+                "src\\program_loop\\program_loop.cpp",
+                "src\\credential_io\\credential_io.cpp",
+                "src\\encryption\\encryption.cpp",
+                "/Fe:pm1"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+    ]
+}

@@ -1,0 +1,24 @@
+## Streams and Buffers:
+
+Buffers- Chunks of memory that store data currently in the process of being transferred (in this case, between the terminal console and the program's input stream (std::cin)). 
+
+Streams- abstract channels for reading and writing data.
+
+Each stream has an associated buffer (input stream, input buffer.) Unlike buffers, streams are not physical things in your computer. A stream is an abstraction that allow you to treat the source and destination of some data uniformly: In "std::getline(std::cin, name)" the user-typed input  is the data, while th eterminal is the source and the string variable "name" (technically, its location in memory) is the destination.
+
+
+[Keyboard / Terminal] → [Input Buffer] → [std::cin stream] → [name string variable]
+         ▲                     ▲                  ▲                     ▲
+       source              temporary         stream              destination
+
+
+One must clear the input buffer after using std::cin or else the newline that is inserted when you press the enter key will linger in the buffer and will be read by future std::getline() calls as input. The line "std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n')" clears all data in the input stream (std::cin) up until the next newline. Technically, it specifies to clear (if necessary) the maximum value of characters possible up until the next newline.
+#########################################################################################################
+
+## Project Organization:
+
+I debated between having and not having sepaerate .* files for every bit of functionality- the program loop (main, plus sign up/sign in,) encryption, and reading/writing user credentials to credentials.txt. On one hand, I wanted to practice working on a "bigger" project by having to carefully think through project structure ahead of time and divide source files up in an organized fashion. But on the other hand, I didn't want to over-engineer an incredibly basic project such as this. I ended up going the "over-engineering" route, as I've heared project structure is very important and it's best to get into good habits as early as possible. I think it will be well worth the slight increase in complexity. 
+
+I was getting bothered with the .obj files cluttering up my project, so I consulted ChatGPT for advice on keeping a neat setup. I learned about the three main options: the "/Fo" compiler flag, setting up a .json file, and setting up a batch file. ChatGPT recommended either using a tasks.json, a build.bat file, or a combination of both. I went with setting up a tasks.json file for this first project. I understand this leaves my build process VSCode-specific, but I don't want to over-complicate things with multiple or combined build configurations for a project I'll never be exporting. I feel setting up a tasks.json file is the perfect balance between familiarizing myself with build configurations, but not over-complicating things too early on, especially since I'm already adding "extra" complexity by going further into project organization/structure when it's not necessary outside of learning how to do it and falling into good habits. 
+
+In configuring my tasks.json file with chatGPT's guidance, I learned some neat things. Number one, it's common practice to store the executable file in ..\bin, and to keep intermediate files seperate in ..\build. Using tasks.json, I can have VSCode automatically build a compilation/link command by 
