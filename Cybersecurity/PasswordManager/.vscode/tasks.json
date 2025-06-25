@@ -11,7 +11,7 @@
                 "/Fo:build\\",
                 "main.cpp",
                 "src\\program_loop\\program_loop.cpp",
-                "src\\credential_io\\credential_io.cpp",
+                "src\\key\\key.cpp",
                 "src\\encryption\\encryption.cpp",
                 "/Fe:pm1"
             ],

@@ -15,10 +15,77 @@ Each stream has an associated buffer (input stream, input buffer.) Unlike buffer
 One must clear the input buffer after using std::cin or else the newline that is inserted when you press the enter key will linger in the buffer and will be read by future std::getline() calls as input. The line "std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n')" clears all data in the input stream (std::cin) up until the next newline. Technically, it specifies to clear (if necessary) the maximum value of characters possible up until the next newline.
 #########################################################################################################
 
-## Project Organization:
+## Project Use and Organization:
 
 I debated between having and not having sepaerate .* files for every bit of functionality- the program loop (main, plus sign up/sign in,) encryption, and reading/writing user credentials to credentials.txt. On one hand, I wanted to practice working on a "bigger" project by having to carefully think through project structure ahead of time and divide source files up in an organized fashion. But on the other hand, I didn't want to over-engineer an incredibly basic project such as this. I ended up going the "over-engineering" route, as I've heared project structure is very important and it's best to get into good habits as early as possible. I think it will be well worth the slight increase in complexity. 
 
 I was getting bothered with the .obj files cluttering up my project, so I consulted ChatGPT for advice on keeping a neat setup. I learned about the three main options: the "/Fo" compiler flag, setting up a .json file, and setting up a batch file. ChatGPT recommended either using a tasks.json, a build.bat file, or a combination of both. I went with setting up a tasks.json file for this first project. I understand this leaves my build process VSCode-specific, but I don't want to over-complicate things with multiple or combined build configurations for a project I'll never be exporting. I feel setting up a tasks.json file is the perfect balance between familiarizing myself with build configurations, but not over-complicating things too early on, especially since I'm already adding "extra" complexity by going further into project organization/structure when it's not necessary outside of learning how to do it and falling into good habits. 
 
-In configuring my tasks.json file with chatGPT's guidance, I learned some neat things. Number one, it's common practice to store the executable file in ..\bin, and to keep intermediate files seperate in ..\build. Using tasks.json, I can have VSCode automatically build a compilation/link command by 
+In configuring my tasks.json file with chatGPT's guidance, I learned some neat things. Number one, it's common practice to store the executable file in ..\bin, and to keep intermediate files seperate in ..\build. Using tasks.json, I can automatically compile and build my executable by simply pressing ctrl + shift + B and selecting "Build Password Manager," which is the label I specified in tasks.json for this specific task.
+#########################################################################################################
+
+## Implementation:
+
+----
+Learned about using try/catch blocks in C++ when preventing a bug in my code that occurred when a user would input a character or string for the main menu sign up/sign in choice. The original code snippet in mainMenu() (in program_loop.cpp) was:
+
+int action;
+std::cout << "Enter '1' to sign up, or enter '2' to sign in: ";
+std::cin >> action;
+std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+std::cout << '\n';
+
+I changed it to:
+
+std::string input;
+std::cout << "Enter '1' to sign up, or enter '2' to sign in: ";
+std::cin >> input;
+std::cin.ignore(std::numeric_limits<std::streamsize::max()>, '\n');
+std::cout << '\n';
+
+int action;
+try 
+{
+    action = std::stoi(input); // string to int
+}
+
+catch (...) // catches ANY acception
+{
+    std::cout << "Invalid input.\n\n";
+    continue;
+}
+
+----
+I learned about XOR encryption as well. Say we have two 4-bit binary numbers: a = 0101, and b = 0001. When we perform an XOR operation (a ^ b), we go through each number, comparing the bits at each index, and input them into an XOR gate: the first bit in a is 0, the first bit in b is 0, in XOR, 0 and 0 yield 0. The second index of a is 1, the second index of b is 0, as inputs for an XOR gate, the result in 1. We continue the process for each index.
+
+I had to make a random number generator (RNG) in the conventional and modern C++ style. It's compirsed of three main parts: a seed, a random number generator, and a distribution range. Here's the codeblock in it's entirety:
+
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_int_distribution<> dist(1, 10);
+
+int random_num = dist(gen);
+
+Line one creates an object of the random_device class called "rd." When called, rd asks the OS to randomly select a value from the pool of hardware entropy values, which is then used in line two to seed our "random number engine," which in this case is a specific engine called a "Mersenne Twister." The twister uses the seed value as a  'key,' generating an array of 624 unsigned 32-bit numbers based on it. It then takes a value, tweaks it, and returns it. This value is then used by the uniform_int_distribution
+obj made in line 3, which takes the value uses an algorithm to bring it down to a number in the desired range (1 thorugh 10, in my case.) The algorithm looks something like this:
+
+int uniform_int(typename engine, int a, int b) {
+    int range = b - a + 1;
+    uint32_t engine_range = engine.max() - engine.min() + 1;
+    uint32_t bucket_size = engine_range / range;
+    uint32_t limit = bucket_size * range;
+
+    uint32_t raw;
+    do {
+        raw = engine() - engine.min();
+    } while (raw >= limit);  // Reject biased values
+
+    return a + (raw / bucket_size);
+}
+
+So in summary, here are the two main steps: 
+1) In "std::mt19937 gen(rd());", "rd()" yields a randomly selected random hardware entropy value that is used to seed std::mt19937 gen(), a random number engine that produces an array of 624 32-bit unsigned integers and takes one of those values, tweaks it, and returns it.
+
+2) The uniform_int_distribution obj dist() algorithmically "squashes" that value down to a number that falls in the range passed into it ((1,10), in my case.)
+
+

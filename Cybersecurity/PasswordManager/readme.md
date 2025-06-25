@@ -1,3 +1,5 @@
+## overview:
+
 I will learn about encryption and file handling by making a simple password manager. 
 
 This program will have two options, A) Sign up, and B) sign in:
@@ -17,7 +19,13 @@ B)
 2) User enters password.
 
 3) Program checks to see if password matches what's in "database." 
-----
 
 Example usernames and encrypted passwords will appear in example_output.txt, while real output will be stored in credentials.cpp which I will exclude from version control using .gitignore. This is to A) familiarize myself with .gitignore, and B) to develop good habits and prevent bad ones.
+----
+## Syntax:
+
+directories- snake_case
+files-       snake_case
+functions-   camelCase
+variables-   camelCase
 

@@ -1,0 +1,23 @@
+1) Succesfully encrypt password:
+
+PS C:\Users\camer\OneDrive\Desktop\Summer25\Cybersecurity\PasswordManager> ./pm1
+Enter '1' to sign up, or enter '2' to sign in: 1
+
+Enter username: Cameron Kapoor
+
+Enter password: crAzyP@55w0rd%^$&
+
+Confirm password: crAzyP@55w0rd%^$&
+
+Passwords match.
+
+Choose encryption. Enter '1' for XOR, or enter '2' for Caesar: 1
+
+Key: }%╨⌂ΦWá¿╙µ
+
+Encrypted password: ▲Wæ♣æα¥µæMW┤Z╢så
+
+Confirm original password: crAzyP@55w0rd%^$&
+
+Enter '1' to sign up, or enter '2' to sign in:
+---------------------------------------------------------------------------------------------------------

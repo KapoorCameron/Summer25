@@ -7,6 +7,5 @@
 
 int main()
 {
-    std::cout<<"__TEST__66\n";
     mainMenu();
 } // cl main.cpp /Fe:pm1
