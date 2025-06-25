@@ -1,4 +1,4 @@
-1) Succesfully encrypt password:
+1) First successful run with XOR encryption:
 
 PS C:\Users\camer\OneDrive\Desktop\Summer25\Cybersecurity\PasswordManager> ./pm1
 Enter '1' to sign up, or enter '2' to sign in: 1
@@ -20,4 +20,31 @@ Encrypted password: ▲Wæ♣æα¥µæMW┤Z╢så
 Confirm original password: crAzyP@55w0rd%^$&
 
 Enter '1' to sign up, or enter '2' to sign in:
+
 ---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+2) First successful run with Caesar encryption:
+
+PS C:\Users\camer\OneDrive\Desktop\Summer25\Cybersecurity\PasswordManager> ./pm1
+Enter '1' to sign up, or enter '2' to sign in: 1
+
+Enter username: clevername
+
+Enter password: crAzyP@55w0rd%^$&
+
+Confirm password: crAzyP@55w0rd%^$&
+
+Passwords match.
+
+Choose encryption. Enter '1' for XOR, or enter '2' for Caesar: 2
+
+Shift before encryption: 0
+
+Shift after encryption: 48
+
+Encrypted password: ôóq¬⌐Çpeeº`óöUÄTV
+
+Confirm original password: crAzyP@55w0rd%^$&
+
+Choose encryption. Enter '1' for XOR, or enter '2' for Caesar:

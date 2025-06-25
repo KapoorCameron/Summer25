@@ -55,8 +55,10 @@ catch (...) // catches ANY acception
     continue;
 }
 
+This was all for nothing when I realised I should just be using char for user input. But at least I learned about try/catch blocks.
+
 ----
-I learned about XOR encryption as well. Say we have two 4-bit binary numbers: a = 0101, and b = 0001. When we perform an XOR operation (a ^ b), we go through each number, comparing the bits at each index, and input them into an XOR gate: the first bit in a is 0, the first bit in b is 0, in XOR, 0 and 0 yield 0. The second index of a is 1, the second index of b is 0, as inputs for an XOR gate, the result in 1. We continue the process for each index.
+I learned about XOR encryption. Say we have two 4-bit binary numbers: a = 0101, and b = 0001. When we perform an XOR operation (a ^ b), we go through each number, comparing the bits at each index, and input them into an XOR gate: the first bit in a is 0, the first bit in b is 0, in XOR, 0 and 0 yield 0. The second index of a is 1, the second index of b is 0, as inputs for an XOR gate, the result in 1. We continue the process for each index.
 
 I had to make a random number generator (RNG) in the conventional and modern C++ style. It's compirsed of three main parts: a seed, a random number generator, and a distribution range. Here's the codeblock in it's entirety:
 
@@ -87,5 +89,6 @@ So in summary, here are the two main steps:
 1) In "std::mt19937 gen(rd());", "rd()" yields a randomly selected random hardware entropy value that is used to seed std::mt19937 gen(), a random number engine that produces an array of 624 32-bit unsigned integers and takes one of those values, tweaks it, and returns it.
 
 2) The uniform_int_distribution obj dist() algorithmically "squashes" that value down to a number that falls in the range passed into it ((1,10), in my case.)
+
 
 

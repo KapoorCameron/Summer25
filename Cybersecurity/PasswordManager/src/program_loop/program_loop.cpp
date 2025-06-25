@@ -41,20 +41,45 @@ void signUp()
         }
     }
 
-    std::string method;
-    std::cout << "Choose encryption. Enter '1' for XOR, or enter '2' for Caesar: ";
-    std::cin >> method;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cout << '\n';
+    while (true)
+    {
+        char method;
+        std::cout << "Choose encryption. Enter '1' for XOR, or enter '2' for Caesar: ";
+        std::cin >> method;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << '\n';
 
-    std::string key = makeKey();
-    std::string encrypted_password = xorEncryption(password, key);
-    std::string original_password = xorEncryption(encrypted_password, key);
+        if (method == '1')
+        {
+            std::string key = makeKey();
+            std::string encrypted_password = xorEncryption(password, key);
+            std::string original_password = xorEncryption(encrypted_password, key);
 
+            std::cout << "Key: " << key << "\n\n";
+            std::cout << "Encrypted password: " << encrypted_password << "\n\n";
+            std::cout << "Confirm original password: " << original_password << "\n\n";
+        }
 
-    std::cout << "Key: " << key << "\n\n";
-    std::cout << "Encrypted password: " << encrypted_password << "\n\n";
-    std::cout << "Confirm original password: " << original_password << "\n\n";
+        else if (method == '2')
+        {
+            int shift = 0;
+            std::cout << "Shift before encryption: " << shift << "\n\n";
+
+            std::string encrypted_password = caesarEncryption(password, shift);
+            std::string original_password = reverseCaesarEncryption(encrypted_password, shift);
+
+            std::cout << "Shift after encryption: " << shift << "\n\n";
+            std::cout << "Encrypted password: " << encrypted_password << "\n\n";
+            std::cout << "Confirm original password: " << original_password << "\n\n";
+        }
+
+        else
+        {
+            std::cout << "Invalid input.\n\n";
+            continue;
+        }
+    }
+    
 }
 
 void signIn()
@@ -66,30 +91,18 @@ void mainMenu()
 {
     while (true)
     {
-        std::string input;
+        char input;
         std::cout << "Enter '1' to sign up, or enter '2' to sign in: ";
         std::cin >> input;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // clears all characters up until newline. If we only did "cin.ignore(...max())," it would ignore any future input as well 
         std::cout << '\n';
 
-        int action;
-        try 
-        {
-            action = std::stoi(input); // string to int
-        }
-
-        catch (...) // catches ANY acception
-        {
-            std::cout << "Invalid input.\n\n";
-            continue;
-        }
-
-        if (action == 1)
+        if (input == '1')
         {
             signUp();
         }
 
-        else if (action == 2)
+        else if (input == '2')
         {
             signIn();
         }
