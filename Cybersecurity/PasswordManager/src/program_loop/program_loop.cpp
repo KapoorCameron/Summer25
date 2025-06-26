@@ -26,19 +26,35 @@ std::string gridToString(const std::vector<std::vector<char>>& grid, int length)
 
 void signUp()
 {
-    std::string username;
-    std::cout << "Enter username: ";
-    std::getline(std::cin, username);
-    std::cout << '\n';
+    while (true)
+    {
+        std::string username;
+        std::cout << "Enter username: ";
+        std::getline(std::cin, username);
+        std::cout << '\n';
+
+        if (username.empty() || (username.find(' ') != std::string::npos && username.find_first_not_of(' ') == std::string::npos))
+        {
+            std::cout << "Invalid username.\n\n";
+            continue;
+        }
+
+        break;
+    }
 
     std::string password;
-
 
     while (true)
     {
         std::cout << "Enter password: ";
         std::getline(std::cin, password);
         std::cout << '\n';
+
+        if (password.empty())
+        {
+            std::cout << "Invalid input.\n\n";
+            continue;
+        }
 
         std::string password_confirm;
         std::cout << "Confirm password: ";
@@ -62,13 +78,13 @@ void signUp()
 
     while (true)
     {
-        char method;
+        std::string method;
         std::cout << "Choose encryption. Enter '1' for XOR, '2' for Caesar, '3' for XaesOR, or '4' for grid: ";
-        std::cin >> method;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::getline(std::cin, method);
         std::cout << '\n';
 
-        if (method == '1')
+        // XOR
+        if (method == "1")
         {
             std::string key = makeKey();
             std::string encrypted_password = xorEncryption(password, key);
@@ -79,20 +95,35 @@ void signUp()
             std::cout << "Confirm original password: " << original_password << "\n\n";
         }
 
-        else if (method == '2')
+        // CaesarCipher
+        else if (method == "2")
         {
             int shift = 0;
             std::cout << "Shift before encryption: " << shift << "\n\n";
 
             std::string encrypted_password = caesarEncryption(password, shift);
-            std::string original_password = reverseCaesarEncryption(encrypted_password, shift);
+            std::string original_password = caesarDecryption(encrypted_password, shift);
 
             std::cout << "Shift after encryption: " << shift << "\n\n";
             std::cout << "Encrypted password: " << encrypted_password << "\n\n";
             std::cout << "Confirm original password: " << original_password << "\n\n";
         }
 
-        else if (method == '4')
+        // XaesOR
+        else if (method == "3")
+        {
+            int shift = 0;
+            std::string key = makeKey();
+
+            std::string encrypted_password = xaesorEncryption(password, shift, key);
+            std::string original_password = caesarDecryption(xorEncryption(encrypted_password, key), shift);
+
+            std::cout << "Encrypted password: " << encrypted_password << "\n\n";
+            std::cout << "Confirm original password: " << original_password << "\n\n";
+        }
+
+        // Grid
+        else if (method == "4")
         {
             std::random_device rd;
             std::mt19937 gen(rd());
@@ -103,13 +134,14 @@ void signUp()
             std::random_device rd2;
             std::mt19937 gen2(rd2());
 
+            int shift = 0;
             int length;
-            std::vector<std::vector<char>> encrypted_password = gridEncryption(password, key, gen2, length);
+            int original_password_length = password.length();
+
+            std::vector<std::vector<char>> encrypted_password = gridEncryption(password, shift, key, gen2, length);
+            std::string original_password = caesarDecryption(gridDecryption(encrypted_password, key, length, original_password_length), shift);
 
             std::cout << "Encrypted password: \n\n" << gridToString(encrypted_password, length) << "\n\n";
-
-            std::string original_password = gridDecryption(encrypted_password, key, length);
-
             std::cout << "Confirm original password: " << original_password << "\n\n";
         }
 
@@ -118,6 +150,8 @@ void signUp()
             std::cout << "Invalid input.\n\n";
             continue;
         }
+
+        break;
     }
     
 }
@@ -131,18 +165,17 @@ void mainMenu()
 {
     while (true)
     {
-        char input;
+        std::string input;
         std::cout << "Enter '1' to sign up, or enter '2' to sign in: ";
-        std::cin >> input;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // clears all characters up until newline. If we only did "cin.ignore(...max())," it would ignore any future input as well 
+        std::getline(std::cin, input);
         std::cout << '\n';
 
-        if (input == '1')
+        if (input == "1")
         {
             signUp();
         }
 
-        else if (input == '2')
+        else if (input == "2")
         {
             signIn();
         }

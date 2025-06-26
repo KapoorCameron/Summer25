@@ -8,9 +8,9 @@ A) Sign up
 
 1) Users will enter a username and password combo.
 
-2) Program will encrypt password.
+2) Program will encrypt password using the mtheod the user selects.
 
-3) Program will write username/encrypted password combo to passwords.txt.
+3) Program will write username/encrypted password combo to credetnials.txt.
 
 B) 
 

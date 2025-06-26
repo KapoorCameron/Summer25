@@ -59,26 +59,59 @@ Enter '1' to sign up, or enter '2' to sign in: 1
 
 Enter username: clevername
 
-Enter password: metroidprime
+Enter password: metroidprime%^$&
 
-Confirm password: metroidprime
+Confirm password: metroidprime%^$&
 
 Passwords match.
 
 Choose encryption. Enter '1' for XOR, '2' for Caesar, '3' for XaesOR, or '4' for grid: 4
 
+Caesar cipher: ₧ûÑúáÜòíúÜ₧ûVÅUW
+Confirm original password: metroidprime%^$&
+
+16
+
+Length: 8
+
+16
+
 Encrypted password:
 
-m,÷exQt╚
-        ºrQdo.3
-âi╠£dÿΘp
-rBxi`¶m2
-╜╥ecC├♥
-`éú≤¿
-M';♀@
-)Σl@╝
+▼ûφ∟¶
+▬W╫Ñ╟µπú
+6îáh┴:ÜÑ
+ìòj\éízô
+úúùuÜK♣~
+Ü₧ô;╢û
+∙↓VFa%Å╡
+YU⌠P∟W7▌
 
 
-Confirm original password: metroidprime
+Confirm original password: metroidprime%^$&
+
+Enter '1' to sign up, or enter '2' to sign in:
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+)First successful run with XaesOR: 
+
+PS C:\Users\camer\OneDrive\Desktop\Summer25\Cybersecurity\PasswordManager> ./pm1
+Enter '1' to sign up, or enter '2' to sign in: 1
+
+Enter username: clevername
+
+Enter password: VERYcl3v3rP@55w0rd%^$&
+
+Confirm password: VERYcl3v3rP@55w0rd%^$&
+
+Passwords match.
+
+Choose encryption. Enter '1' for XOR, '2' for Caesar, '3' for XaesOR, or '4' for grid: 3
+
+Encrypted password: ~(╟@¶╨¥∙(i  ♦ƒ8∞½+Φ»┴↓ò
+
+Confirm original password: VERYcl3v3rP@55w0rd%^$&
 
 Choose encryption. Enter '1' for XOR, '2' for Caesar, '3' for XaesOR, or '4' for grid:
