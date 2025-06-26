@@ -90,5 +90,24 @@ So in summary, here are the two main steps:
 
 2) The uniform_int_distribution obj dist() algorithmically "squashes" that value down to a number that falls in the range passed into it ((1,10), in my case.)
 
+----
+I Implementated my own encryption function, called "grid." Bassically, the function takes user input and hides it whithin a two-dimensional vector of random characters. It follows a two step process (for the most part) like this:
+
+1) A square grid is built, made up of a two-dimensional vector of characters.
+2) As said grid is built, the user's password is placed character-by-character in every location/coordinate in the grid (grid[i][j]) that meets the condition ((i + j) % key == 0), where key is a random number in the range [2, 4].
+
+The condition is just a random one I came up with, and ensuring the grid had enough locations that satisfied the condition to fit the user's entire password was a challenge. Say we have a 3x3 grid, and the users password is "Computer." Given "Computer" is eight characters long, we need at least eight locations in our 3x3 grid to satisfy our condition of ((i + j) % key == 0). When the key = 2 (the lowest value it can be,) there are four locations that satisfy the condition, those locations are: (0, 0), (0, 2), (1, 1), and (2, 0). But when key = 4 (the highest value it can be,) there are only two locations in the grid that satisfy the condition, those locations being (0, 0) and (2, 2). Even though a 3x3 grid could fit the password "Computer" inside it in general, it couldn't do so if it was only placing in the characters of the password in one at a time at locations that satisfy the condition. With pen and paper, I started going through different grid sizes using the highest value of key (which is 4) to see how the dimensions of the square grid affected the number of locations that satisfied the condition. Here are pictures of the process: 
+
+![Grids brainstorm.](images/Grids0.jpg)
+![Grids lengths 2-7, diagonal pattern starts to become obvious.](images/Grids1.jpg)
+![Grid length 8.](images/Grids2.jpg)
+![Grids length 9 - 10.](images/Grids3.jpg)
+![Grids length 11-12.](images/Grids4.jpg)
+![Grid length 13.](images/Grids5.jpg)
+![I find patterns in how both even and odd indices increment.](images/Grids6.jpg)
+
+
+As you can see, I became aware of a pattern in the lengths of the "diagonals" of satisfactory locations that formed in the grid as its dimensions were increased, but I couldn't yet find a way to map it into code. I also tried finding patterns in the way the number of satisfactory locations grew along side the grid'sdimensions, and this led me to my solution. I noticed an even side length would yield its length^2 many satisfactory values, but also found that there was no pattern I knew how to work with in regards to how the number of satisfactory locations grew with odd side lengths. I decided to always have a grid of even side length. With this simple rule, I then made sure the grid was large enough to have enough satisfactory locations to fit all the characters of the user's password by counting the number of increments needed to get a sidelength that results in more satisfactory locations in the grid than characters in the user's password.
+
 
 

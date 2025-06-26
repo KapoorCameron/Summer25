@@ -3,7 +3,7 @@
 PS C:\Users\camer\OneDrive\Desktop\Summer25\Cybersecurity\PasswordManager> ./pm1
 Enter '1' to sign up, or enter '2' to sign in: 1
 
-Enter username: Cameron Kapoor
+Enter username: clevername
 
 Enter password: crAzyP@55w0rd%^$&
 
@@ -48,3 +48,37 @@ Encrypted password: ôóq¬⌐Çpeeº`óöUÄTV
 Confirm original password: crAzyP@55w0rd%^$&
 
 Choose encryption. Enter '1' for XOR, or enter '2' for Caesar:
+
+---------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------
+
+3) First successful run with grid encryption:
+
+PS C:\Users\camer\OneDrive\Desktop\Summer25\Cybersecurity\PasswordManager> ./pm1
+Enter '1' to sign up, or enter '2' to sign in: 1
+
+Enter username: clevername
+
+Enter password: metroidprime
+
+Confirm password: metroidprime
+
+Passwords match.
+
+Choose encryption. Enter '1' for XOR, '2' for Caesar, '3' for XaesOR, or '4' for grid: 4
+
+Encrypted password:
+
+m,÷exQt╚
+        ºrQdo.3
+âi╠£dÿΘp
+rBxi`¶m2
+╜╥ecC├♥
+`éú≤¿
+M';♀@
+)Σl@╝
+
+
+Confirm original password: metroidprime
+
+Choose encryption. Enter '1' for XOR, '2' for Caesar, '3' for XaesOR, or '4' for grid:

@@ -1,9 +1,28 @@
 #include<iostream>
+#include<sstream>
 #include<string>
+#include<vector>
 
 #include"../encryption/encryption.h"
 #include"../key/key.h"
 #include"program_loop.h"
+
+std::string gridToString(const std::vector<std::vector<char>>& grid, int length)
+{
+    std::ostringstream oss;
+
+    for (int i = 0; i < length; i++)
+    {
+        for (int j = 0; j < length; j++)
+        {
+            oss << grid[i][j];
+        }
+
+        oss << '\n';
+    }
+
+    return oss.str();
+}
 
 void signUp()
 {
@@ -44,7 +63,7 @@ void signUp()
     while (true)
     {
         char method;
-        std::cout << "Choose encryption. Enter '1' for XOR, or enter '2' for Caesar: ";
+        std::cout << "Choose encryption. Enter '1' for XOR, '2' for Caesar, '3' for XaesOR, or '4' for grid: ";
         std::cin >> method;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << '\n';
@@ -70,6 +89,27 @@ void signUp()
 
             std::cout << "Shift after encryption: " << shift << "\n\n";
             std::cout << "Encrypted password: " << encrypted_password << "\n\n";
+            std::cout << "Confirm original password: " << original_password << "\n\n";
+        }
+
+        else if (method == '4')
+        {
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> dist(2, 4);
+
+            int key = dist(gen);
+
+            std::random_device rd2;
+            std::mt19937 gen2(rd2());
+
+            int length;
+            std::vector<std::vector<char>> encrypted_password = gridEncryption(password, key, gen2, length);
+
+            std::cout << "Encrypted password: \n\n" << gridToString(encrypted_password, length) << "\n\n";
+
+            std::string original_password = gridDecryption(encrypted_password, key, length);
+
             std::cout << "Confirm original password: " << original_password << "\n\n";
         }
 
