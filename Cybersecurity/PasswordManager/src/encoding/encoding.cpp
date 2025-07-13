@@ -78,11 +78,3 @@ std::string base64Decode(std::string& encoded)
 
     return decoded;
 }
-
-int main()
-{
-    std::cout << "BooyAHz\n\n";
-    std::string credentials = "big baller";
-    std::cout << "Decoded: " << base64Encode(credentials) << "\n\n" << "Original: " << base64Decode(base64Encode(credentials));
-
-} // cl testing_main.cpp /Fe:tm

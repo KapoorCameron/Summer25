@@ -13,6 +13,7 @@
                 "src\\program_loop\\program_loop.cpp",
                 "src\\key\\key.cpp",
                 "src\\encryption\\encryption.cpp",
+                "src\\encoding\\encoding.cpp",
                 "/Fe:pm1"
             ],
             "group": {

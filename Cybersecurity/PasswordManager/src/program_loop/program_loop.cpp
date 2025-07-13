@@ -178,7 +178,17 @@ void signUp()
 
 void signIn()
 {
+    std::string password;
+    std::cout << "Simple encoding/decoding test: \n\n(NOT TIED TO ACTUAL CREDENTIALS YET)\n\n";
 
+    std::cout << "Enter password: ";
+    std::getline(std::cin, password);
+    std::cout << '\n';
+
+    std::string encoded = base64Encode(password);
+
+    std::cout << "Encoded password: " << encoded << "\n\n";
+    std::cout << "Decoded/original password: " << base64Decode(encoded) << "\n\n";
 }
 
 void mainMenu()
