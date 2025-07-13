@@ -22,6 +22,24 @@ B)
 
 Example usernames and encrypted passwords will appear in example_output.txt, while real output will be stored in credentials.cpp which I will exclude from version control using .gitignore. This is to A) familiarize myself with .gitignore, and B) to develop good habits and prevent bad ones.
 
+Project sign in/sign up flow looks like:
+
+(starting at sign-up menu) 
+1) user enters username
+2) user enters password
+3) user selects encryption method
+4) password is encrypted
+5) password is encoded
+6) method, username, encoded encrypted password, and other relevant data is inserted into an oss and converted to string
+7) string is passed into writeCredentials()
+8) string is written to credentials.txt
+9) user navigates to sign in menu 
+10) user enters username
+11) code checks database for that username 
+12) if there's a match, code prompts for password
+13) user enters password
+14) code takes the password the user entered, encrypts it based on the method specified in first        parameter of my database syntax, and then encodes it with Base64 or something, and then compares that encoded version of the encrypted password with the encoded encrypted password in the database, allowing sign in if they match?
+
 ----
 ## Syntax:
 

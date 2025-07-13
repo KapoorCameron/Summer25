@@ -1,9 +1,9 @@
-#include<array>
-#include<iostream>
-#include<random>
-#include<vector>
+#include <array>
+#include <iostream>
+#include <random>
+#include <vector>
 
-#include"encryption.h"
+#include "encryption.h"
 
 std::string xorEncryption(const std::string& password, const std::string& key)
 {

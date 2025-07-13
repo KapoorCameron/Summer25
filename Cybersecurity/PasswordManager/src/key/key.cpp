@@ -1,6 +1,6 @@
-#include<random>
+#include <random>
 
-#include"key.h"
+#include "key.h"
 
 std::string makeKey()
 {

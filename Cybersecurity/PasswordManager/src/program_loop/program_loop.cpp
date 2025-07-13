@@ -1,11 +1,20 @@
+#include<cstdint>
+#include<fstream>
 #include<iostream>
 #include<sstream>
 #include<string>
 #include<vector>
 
+#include"../auth_read_write/auth_read_write.h"
+#include"../encoding/encoding.h"
 #include"../encryption/encryption.h"
 #include"../key/key.h"
 #include"program_loop.h"
+
+void writeCredentials(std::string& credentials)
+{
+
+}
 
 std::string gridToString(const std::vector<std::vector<char>>& grid, int length)
 {
@@ -26,9 +35,10 @@ std::string gridToString(const std::vector<std::vector<char>>& grid, int length)
 
 void signUp()
 {
+    std::string username;
+
     while (true)
     {
-        std::string username;
         std::cout << "Enter username: ";
         std::getline(std::cin, username);
         std::cout << '\n';
@@ -76,6 +86,8 @@ void signUp()
         }
     }
 
+    std::string encrypted_password;
+
     while (true)
     {
         std::string method;
@@ -87,12 +99,18 @@ void signUp()
         if (method == "1")
         {
             std::string key = makeKey();
-            std::string encrypted_password = xorEncryption(password, key);
+            encrypted_password = xorEncryption(password, key);
             std::string original_password = xorEncryption(encrypted_password, key);
 
             std::cout << "Key: " << key << "\n\n";
             std::cout << "Encrypted password: " << encrypted_password << "\n\n";
             std::cout << "Confirm original password: " << original_password << "\n\n";
+
+            std::string encoded_password;
+
+            // writeCredentials(method, username, encrypted, key)
+            std::ostringstream oss; 
+            oss << method << ", " << username << ", " << encrypted_password << ", " << key <<";";
         }
 
         // CaesarCipher
@@ -101,7 +119,7 @@ void signUp()
             int shift = 0;
             std::cout << "Shift before encryption: " << shift << "\n\n";
 
-            std::string encrypted_password = caesarEncryption(password, shift);
+            encrypted_password = caesarEncryption(password, shift);
             std::string original_password = caesarDecryption(encrypted_password, shift);
 
             std::cout << "Shift after encryption: " << shift << "\n\n";
@@ -115,7 +133,7 @@ void signUp()
             int shift = 0;
             std::string key = makeKey();
 
-            std::string encrypted_password = xaesorEncryption(password, shift, key);
+            encrypted_password = xaesorEncryption(password, shift, key);
             std::string original_password = caesarDecryption(xorEncryption(encrypted_password, key), shift);
 
             std::cout << "Encrypted password: " << encrypted_password << "\n\n";
@@ -131,8 +149,10 @@ void signUp()
 
             int key = dist(gen);
 
+            // we need to keep track of the seed used for our MT so when we store the password and relevant data for sign in functionality, we can compare saved and entered encrypted passwords:
             std::random_device rd2;
-            std::mt19937 gen2(rd2());
+            uint32_t seed = rd2(); // write this to file with method, username, password, etc.
+            std::mt19937 gen2(seed);
 
             int shift = 0;
             int length;

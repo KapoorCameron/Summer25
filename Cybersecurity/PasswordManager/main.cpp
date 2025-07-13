@@ -1,11 +1,8 @@
-#include<fstream>
-#include<iostream>
-#include<limits>
-#include<string>
-
-#include"src/program_loop/program_loop.h"
+#include <iostream>
+#include "src/program_loop/program_loop.h"
 
 int main()
 {   
+    std::cout << "Funny\n\n";
     mainMenu();
 }

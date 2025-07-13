@@ -1,8 +1,8 @@
 #pragma once
 
-#include<random>
-#include<string>
-#include<vector>
+#include <random>
+#include <string>
+#include <vector>
 
 std::string xorEncryption(const std::string& password, const std::string& key);
 std::string caesarEncryption(const std::string& password, int& shift);
