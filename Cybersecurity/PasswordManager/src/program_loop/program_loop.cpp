@@ -1,4 +1,6 @@
+#include<algorithm>
 #include<cstdint>
+#include<cstdlib>
 #include<fstream>
 #include<iostream>
 #include<sstream>
@@ -10,11 +12,6 @@
 #include"../encryption/encryption.h"
 #include"../key/key.h"
 #include"program_loop.h"
-
-void writeCredentials(std::string& credentials)
-{
-
-}
 
 std::string gridToString(const std::vector<std::vector<char>>& grid, int length)
 {
@@ -33,6 +30,43 @@ std::string gridToString(const std::vector<std::vector<char>>& grid, int length)
     return oss.str();
 }
 
+bool usernameExists(const std::string& encodedUsername)
+{
+    std::ifstream credentials("credentials.txt");
+
+    if (!credentials)
+    {
+        std::cerr << "File error-- check state or accessibility.\n\n";
+        return 1;
+    }
+
+    std::string line;
+
+    while (std::getline(credentials, line))
+    {
+        if (line.empty())
+        {
+            continue;
+        }
+
+        std::stringstream ss(line);
+        std::string cred;
+        std::vector<std::string> creds;
+
+        while(std::getline(ss, cred, ','))
+        {
+            creds.push_back(cred);
+        }
+
+        if (creds[1] == encodedUsername)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void signUp()
 {
     std::string username;
@@ -46,6 +80,14 @@ void signUp()
         if (username.empty() || (username.find(' ') != std::string::npos && username.find_first_not_of(' ') == std::string::npos))
         {
             std::cout << "Invalid username.\n\n";
+            continue;
+        }
+
+        bool invalidUsername = usernameExists(base64Encode(username));
+
+        if (invalidUsername)
+        {
+            std::cout << "Username already in use.\n\n";
             continue;
         }
 
@@ -106,11 +148,17 @@ void signUp()
             std::cout << "Encrypted password: " << encrypted_password << "\n\n";
             std::cout << "Confirm original password: " << original_password << "\n\n";
 
-            std::string encoded_password;
+            std::string encoded_username = base64Encode(username);
+            std::string encoded_password = base64Encode(encrypted_password);
+            std::string encoded_key = base64Encode(key);
 
             // writeCredentials(method, username, encrypted, key)
             std::ostringstream oss; 
-            oss << method << ", " << username << ", " << encrypted_password << ", " << key <<";";
+            oss << method << "," << encoded_username << "," << encoded_password << "," << encoded_key <<"\n";
+
+            std::ofstream credentials("credentials.txt", std::ios::app);
+            credentials << oss.str();
+            credentials.close();
         }
 
         // CaesarCipher
@@ -176,19 +224,78 @@ void signUp()
     
 }
 
-void signIn()
+int signIn()
 {
-    std::string password;
-    std::cout << "Simple encoding/decoding test: \n\n(NOT TIED TO ACTUAL CREDENTIALS YET)\n\n";
+    bool validUsername = false;
 
-    std::cout << "Enter password: ";
-    std::getline(std::cin, password);
-    std::cout << '\n';
+    std::string username;
+    std::cout << "\n\nEnter username: ";
+    std::getline(std::cin, username);
 
-    std::string encoded = base64Encode(password);
+    std::string encoded_username = base64Encode(username);
 
-    std::cout << "Encoded password: " << encoded << "\n\n";
-    std::cout << "Decoded/original password: " << base64Decode(encoded) << "\n\n";
+    std::ifstream credentials("credentials.txt");
+
+    if (!credentials)
+    {
+        std::cerr << "File error-- check state or accessibility.\n\n";
+        return 1;
+    }
+
+    std::string line;
+
+    while (std::getline(credentials, line))
+    {
+        if (line.empty())
+        {
+            continue;
+        }
+
+        std::stringstream ss(line);
+        std::string cred;
+        std::vector<std::string> creds;
+
+        // We use getline to take characters from ss and parse them into substrings that we place into "cred" using the delimiter ',' to separate said substrings and push_back into creds vector:
+        while(std::getline(ss, cred, ','))
+        {
+            creds.push_back(cred);
+        }
+
+        if (creds[1] == encoded_username)
+        {
+            validUsername = true;
+            std::string correctPassword = creds[2];
+                if (creds[0] == "1") // XOR
+                {
+                    int attempts = 0;
+                    while (attempts++ < 3)
+                    {
+                        std::string password;
+                        std::cout << "Enter password: ";
+                        std::getline(std::cin, password);
+                        std::cout << "\n\n";
+
+                        password = base64Encode(xorEncryption(password, base64Decode(creds[3])));
+
+                        if (password == correctPassword)
+                        {
+                            std::cout << "Successfully signed in.\n\n";
+                            return 0;
+                        }
+
+                        std::cout << "Incorrect password, try again.\n\n";
+                    }
+
+                    std::cout << "Program quit, too many failed password attempts.\n\n";
+                    exit(1);
+                    
+                }
+            }
+    }
+
+    if (!validUsername) std::cout << "Invalid username.";
+
+    return 1;
 }
 
 void mainMenu()

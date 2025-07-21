@@ -3,6 +3,6 @@
 
 int main()
 {   
-    std::cout << "P16!!!\n\n";
+    std::cout << "Ugh.\n\n";
     mainMenu();
 }

@@ -2,4 +2,5 @@
 
 void mainMenu();
 void signUp();
-void signIn();
+int signIn();
+bool usernameExists(const std::string& encodedUsername);
