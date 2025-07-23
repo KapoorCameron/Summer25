@@ -3,6 +3,5 @@
 
 int main()
 {   
-    std::cout << "Please just be booyah\n\n";
     mainMenu();
 }
