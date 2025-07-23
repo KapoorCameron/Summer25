@@ -53,8 +53,6 @@ std::vector<std::vector<char>> gridEncryption(const std::string& password, int &
     std::vector<std::vector<char>> grid;
 
     std::string caesarCipher = caesarEncryption(password, shift);
-    std::cout << "Caesar cipher: " << caesarCipher << "\n";
-    std::cout << "Confirm original password: " << caesarDecryption(caesarCipher, shift) << "\n\n";
 
     int charCount = 0;
     for (char c : caesarCipher)
