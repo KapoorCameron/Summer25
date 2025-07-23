@@ -70,12 +70,15 @@ bool usernameExists(const std::string& encodedUsername)
 void signUp()
 {
     std::string username;
+    std::string encoded_username;
+    std::string password;
 
     while (true)
     {
         std::cout << "Enter username: ";
         std::getline(std::cin, username);
-        std::cout << '\n';
+        encoded_username = base64Encode(username);
+
 
         if (username.empty() || (username.find(' ') != std::string::npos && username.find_first_not_of(' ') == std::string::npos))
         {
@@ -94,13 +97,10 @@ void signUp()
         break;
     }
 
-    std::string password;
-
     while (true)
     {
         std::cout << "Enter password: ";
         std::getline(std::cin, password);
-        std::cout << '\n';
 
         if (password.empty())
         {
@@ -148,13 +148,12 @@ void signUp()
             std::cout << "Encrypted password: " << encrypted_password << "\n\n";
             std::cout << "Confirm original password: " << original_password << "\n\n";
 
-            std::string encoded_username = base64Encode(username);
-            std::string encoded_password = base64Encode(encrypted_password);
             std::string encoded_key = base64Encode(key);
+            std::string encoded_encrypted_password = base64Encode(encrypted_password);
 
             // writeCredentials(method, username, encrypted, key)
             std::ostringstream oss; 
-            oss << method << "," << encoded_username << "," << encoded_password << "," << encoded_key <<"\n";
+            oss << method << "," << encoded_username << "," << encoded_encrypted_password << "," << encoded_key <<"\n";
 
             std::ofstream credentials("credentials.txt", std::ios::app);
             credentials << oss.str();
@@ -164,21 +163,37 @@ void signUp()
         // CaesarCipher
         else if (method == "2")
         {
-            int shift = 0;
-            std::cout << "Shift before encryption: " << shift << "\n\n";
+            // create random num engine:
+            std::random_device rd;
+            std::mt19937 gen(rd());
 
+            // choose range:
+            std::uniform_int_distribution<> dist(48, 58);
+
+            // RNG to assign value to shift:
+            int shift = dist(gen);
             encrypted_password = caesarEncryption(password, shift);
             std::string original_password = caesarDecryption(encrypted_password, shift);
 
-            std::cout << "Shift after encryption: " << shift << "\n\n";
-            std::cout << "Encrypted password: " << encrypted_password << "\n\n";
-            std::cout << "Confirm original password: " << original_password << "\n\n";
+            std::string encoded_encrypted_password = base64Encode(encrypted_password);
+
+            std::ostringstream oss;
+            oss << method << "," << encoded_username << "," << encoded_encrypted_password << "," << base64Encode(std::to_string(shift)) << "\n";
+
+            std::ofstream credentials("credentials.txt", std::ios::app);
+            credentials << oss.str();
+            credentials.close();
+
         }
 
         // XaesOR
         else if (method == "3")
         {
-            int shift = 0;
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> dist(48, 58);
+
+            int shift = dist(gen);
             std::string key = makeKey();
 
             encrypted_password = xaesorEncryption(password, shift, key);
@@ -186,11 +201,25 @@ void signUp()
 
             std::cout << "Encrypted password: " << encrypted_password << "\n\n";
             std::cout << "Confirm original password: " << original_password << "\n\n";
+
+            std::ostringstream oss;
+
+            oss << method << "," << base64Encode(username) << "," << base64Encode(encrypted_password) << "," << base64Encode(std::to_string(shift)) << "," << base64Encode(key) << "\n";
+
+            std::ofstream credentials("credentials.txt", std::ios::app);
+            credentials << oss.str();
+            credentials.close();
         }
 
         // Grid
         else if (method == "4")
         {
+            std::random_device rd1; 
+            std::mt19937 gen1(rd1()); 
+            std::uniform_int_distribution<> dist1(48, 58);
+
+            int shift = dist1(gen1);
+
             std::random_device rd;
             std::mt19937 gen(rd());
             std::uniform_int_distribution<> dist(2, 4);
@@ -199,10 +228,9 @@ void signUp()
 
             // we need to keep track of the seed used for our MT so when we store the password and relevant data for sign in functionality, we can compare saved and entered encrypted passwords:
             std::random_device rd2;
-            uint32_t seed = rd2(); // write this to file with method, username, password, etc.
+            uint32_t seed = rd2();
             std::mt19937 gen2(seed);
-
-            int shift = 0;
+            
             int length;
             int original_password_length = password.length();
 
@@ -211,6 +239,15 @@ void signUp()
 
             std::cout << "Encrypted password: \n\n" << gridToString(encrypted_password, length) << "\n\n";
             std::cout << "Confirm original password: " << original_password << "\n\n";
+
+            std::string grid_string = gridToString(encrypted_password, length);
+
+            std::ostringstream oss;
+            oss << method << "," << base64Encode(username) << "," << base64Encode(grid_string) << "," << base64Encode(std::to_string(shift)) << "," << base64Encode(std::to_string(key)) << "," << base64Encode(std::to_string(seed)) << "," << base64Encode(std::to_string(length)) << "\n";
+
+            std::ofstream credentials("credentials.txt", std::ios::app);
+            credentials << oss.str();
+            credentials.close();
         }
 
         else
@@ -229,7 +266,7 @@ int signIn()
     bool validUsername = false;
 
     std::string username;
-    std::cout << "\n\nEnter username: ";
+    std::cout << "Enter username: ";
     std::getline(std::cin, username);
 
     std::string encoded_username = base64Encode(username);
@@ -268,12 +305,12 @@ int signIn()
                 if (creds[0] == "1") // XOR
                 {
                     int attempts = 0;
-                    while (attempts++ < 3)
+                    while (attempts++ < 3) // automatically increments
                     {
                         std::string password;
                         std::cout << "Enter password: ";
                         std::getline(std::cin, password);
-                        std::cout << "\n\n";
+                        std::cout << "\n";
 
                         password = base64Encode(xorEncryption(password, base64Decode(creds[3])));
 
@@ -288,12 +325,94 @@ int signIn()
 
                     std::cout << "Program quit, too many failed password attempts.\n\n";
                     exit(1);
-                    
+                }
+
+                else if (creds[0] == "2") // Caesar 
+                {
+                    int attempts = 0;
+                    while (attempts++ < 3)
+                    {
+                        std::string password;
+                        std::cout << "Enter password: ";
+                        std::getline(std::cin, password);
+                        std::cout << "\n";
+
+                        password = base64Encode(caesarEncryption(password, std::stoi(base64Decode(creds[3]))));
+
+                        if (password == correctPassword)
+                        {
+                            std::cout << "Successfully signed in.\n\n";
+                            return 0;
+                        }
+
+                            std::cout << "Incorrect password, try again.\n\n";
+                    }
+
+                    std::cout << "Program quit, too many failed password attempts.\n\n";
+                    exit(1);
+                }
+
+                else if (creds[0] == "3") // XaesOR
+                {
+                    int attempts = 0;
+                    while (attempts++ < 3)
+                    {
+                        std::string password;
+                        std::cout << "Enter password: ";
+                        std::getline(std::cin, password);
+                        std::cout << "\n";
+
+                        password = base64Encode(xaesorEncryption(password, std::stoi(base64Decode(creds[3])), base64Decode(creds[4])));
+
+                        if (password == correctPassword)
+                        {
+                            std::cout << "Successfully signed in.\n\n";
+                            return 0;
+                        }
+
+                            std::cout << "Incorrect password, try again.\n\n";
+                    }
+
+                    std::cout << "Program quit, too many failed password attempts.\n\n";
+                    exit(1);
+                }
+
+                else if (creds[0] == "4")
+                {
+                    int attempts = 0;
+                    while (attempts++ < 3)
+                    {
+                        std::string password;
+                        std::cout << "Enter password: ";
+                        std::getline(std::cin, password);
+                        std::cout << "\n";
+
+                        int shift = std::stoi(base64Decode(creds[3]));
+                        int key = std::stoi(base64Decode(creds[4]));
+                        uint32_t seed = static_cast<uint32_t>(std::stoul(base64Decode(creds[5])));
+                        std::mt19937 gen(seed);
+                        int length = std::stoi(base64Decode(creds[6]));
+
+                        std::vector<std::vector<char>> grid = gridEncryption(password, shift, key, gen, length);
+
+                        password = base64Encode(gridToString(grid, length));
+
+                        if (password == correctPassword)
+                        {
+                            std::cout << "Successfully signed in.\n\n";
+                            return 0;
+                        }
+
+                            std::cout << "Incorrect password, try again.\n\n";
+                    }
+
+                    std::cout << "Program quit, too many failed password attempts.\n\n";
+                    exit(1);
                 }
             }
     }
 
-    if (!validUsername) std::cout << "Invalid username.";
+    if (!validUsername) std::cout << "\nInvalid username.\n\n";
 
     return 1;
 }

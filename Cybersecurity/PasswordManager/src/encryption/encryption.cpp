@@ -17,19 +17,9 @@ std::string xorEncryption(const std::string& password, const std::string& key)
     return encrypted_password;
 }
 
-std::string caesarEncryption(const std::string& password, int& shift)
+std::string caesarEncryption(const std::string& password, int shift)
 {
     std::string encrypted_password;
-
-    // create random num engine:
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    // choose range:
-    std::uniform_int_distribution<> dist(48, 58);
-
-    // RNG to assign value to shift:
-    shift = dist(gen);
 
     for (int i = 0; i < password.length(); i++)
     {
@@ -42,10 +32,6 @@ std::string caesarEncryption(const std::string& password, int& shift)
 std::string caesarDecryption(const std::string& encrypted_password, int& shift)
 {
     std::string decrypted_password;
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(48, 58);
     
     for (int i = 0; i < encrypted_password.length(); i++)
     {
@@ -55,14 +41,14 @@ std::string caesarDecryption(const std::string& encrypted_password, int& shift)
     return decrypted_password;
 }
 
-std::string xaesorEncryption(const std::string& password, int& shift, const std::string& key)
+std::string xaesorEncryption(const std::string& password, int shift, const std::string& key)
 {
     std::string caesarCipher = caesarEncryption(password, shift);
     std::string encrypted = xorEncryption(caesarCipher, key);
     return encrypted;
 }
 
-std::vector<std::vector<char>> gridEncryption(const std::string& password, int& shift, int key, std::mt19937 gen, int& length)
+std::vector<std::vector<char>> gridEncryption(const std::string& password, int &shift, int &key, std::mt19937 &gen, int &length)
 {
     std::vector<std::vector<char>> grid;
 
